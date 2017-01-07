@@ -420,22 +420,23 @@
 /* 6 */
 /***/ function(module, exports) {
 
+	'use strict';
+
 	//
 	//
 	//
 	//
 
-	module.exports ={
-	    data:function(){
-	        return{
-	            msg:'Hello World Shit'
-	        }
+	module.exports = {
+	    data: function data() {
+	        return {
+	            msg: 'Hello World Shit La sdsdf'
+	        };
 	    },
-	    created:function(){
-	        console.log('done');
+	    created: function created() {
+	        console.log('done at:' + Date.now());
 	    }
-	}
-
+	};
 
 /***/ },
 /* 7 */

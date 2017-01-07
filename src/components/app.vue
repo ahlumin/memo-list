@@ -6,11 +6,11 @@
     module.exports ={
         data:function(){
             return{
-                msg:'Hello World Shit'
+                msg:'Hello World Shit La sdsdf'
             }
         },
-        created:function(){
-            console.log('done');
+        created(){
+            console.log('done at:' + Date.now());
         }
     }
 </script>
