@@ -3,7 +3,7 @@ var path = require('path');
 
 module.exports = {
     entry:{
-        app:'./src/app-entry.js'
+        app:['babel-polyfill', './src/app-entry.js']
     },
     output:{
         filename:'src/assets/js/[name].js'
@@ -13,6 +13,7 @@ module.exports = {
             path.resolve('src/components'),
             path.resolve('src/template'),
             path.resolve('src/assets'),
+            path.resolve('src/store')
         ],
         extensions:['', '.js', '.vue']
     },
@@ -21,6 +22,11 @@ module.exports = {
     },
     module:{
         loaders:[
+            {
+                text:/\.js$/,
+                loader:'babel',
+                exclude:['node_modules', 'components']
+            },
             {
                 text:/\.vue$/,
                 loader:'vue',
