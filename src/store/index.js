@@ -4,7 +4,7 @@ const dao = require('data-access-object');
 
 const store = new Vuex.Store({
     state:{
-        msg:null,
+        data:[],
         dateYear:{
             type:Number,
             value:null
@@ -16,7 +16,7 @@ const store = new Vuex.Store({
     },
     mutations:{
         async mFetch(state){
-          state.msg = await dao.ddd(state.dateYear, state.dateMonth) 
+          state.data = await dao.getAccountingData(state.dateYear, state.dateMonth) 
         }
     },
     actions:{
@@ -45,6 +45,9 @@ const store = new Vuex.Store({
         fetch(context){
             // 載入當月資料
             context.commit('mFetch')
+        },
+        addItem(context, data){
+            context.state.data.push(data);
         }
     }
 });

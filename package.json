@@ -16,6 +16,7 @@
     "babel-preset-env": "^1.1.6",
     "css-loader": "^0.26.1",
     "express": "^4.14.0",
+    "lodash": "^4.17.4",
     "vue": "^2.1.8",
     "vue-loader": "^10.0.2",
     "vue-template-compiler": "^2.1.8",

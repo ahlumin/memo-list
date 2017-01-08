@@ -1,14 +1,15 @@
 <template>      
     <div class="calculate-panel">
-        {{ msg }}
+        TOTAL COST:{{ totalCost }}
     </div>
 </template>
 
 <script>
     module.exports={
-        data(){
-            return{
-                msg:'this is calculate-panel'
+        computed:{
+            totalCost(){
+                //TODO:vuex getter
+                return 0;
             }
         }
     }
