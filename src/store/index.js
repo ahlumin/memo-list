@@ -13,6 +13,11 @@ const store = new Vuex.Store({
         dateMonth:{
             type:Number,
             value:null
+        },
+        loginInfo:{
+            isLogin:false,
+            user:'',
+            token:''
         }
     },
     getters:{
@@ -24,9 +29,29 @@ const store = new Vuex.Store({
         }
     },
     mutations:{
-        async mFetch(state){
-          var data = await dao.getAccountingData(state.dateYear, state.dateMonth) 
+        async mLogin(state){
+            let info = await dao.login();
+            if(info)
+            {
+                state.loginInfo.isLogin = true;
+                state.loginInfo.user = info.user.uid;
+                
+                var data = await dao.getAccountingData(state.dateYear, state.dateMonth, state.loginInfo.user);
+                
+                console.log(data);
 
+                var list = [];
+                _.forOwn(data.val(), (value, key)=>{
+                    value.key = key;
+                    list.push(value);
+                });
+
+                state.data = _.orderBy(list, o=>o.created_datetime, 'desc');
+            }
+        },
+        async mFetch(state){
+          var data = await dao.getAccountingData(state.dateYear, state.dateMonth, state.loginInfo.user);
+         
           var list = [];
           _.forOwn(data.val(), (value, key)=>{
             value.key = key;
@@ -43,6 +68,9 @@ const store = new Vuex.Store({
         }
     },
     actions:{
+        login(context){
+            context.commit('mLogin');
+        },
         initDate(context){
             //初始化日期
             let _date = new Date();

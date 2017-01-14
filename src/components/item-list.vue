@@ -79,7 +79,8 @@
             }
         },
         created(){
-            this.$store.dispatch('fetch');
+            this.$store.dispatch('login');
+            //this.$store.dispatch('fetch');
             this.dataAdd.date = '2017/1/14';
         }
     }
