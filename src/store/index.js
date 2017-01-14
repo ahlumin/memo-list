@@ -1,6 +1,7 @@
 const Vue = require('vue');
 const Vuex = require('vuex');
 const dao = require('data-access-object');
+var _ = require('lodash');
 
 const store = new Vuex.Store({
     state:{
@@ -14,9 +15,31 @@ const store = new Vuex.Store({
             value:null
         }
     },
+    getters:{
+        totalIncome:state => {
+            return _.sumBy(state.data, o => o.income);
+        },
+        totalCost: state => {
+            return _.sumBy(state.data, o => o.cost);
+        }
+    },
     mutations:{
         async mFetch(state){
-          state.data = await dao.getAccountingData(state.dateYear, state.dateMonth) 
+          var data = await dao.getAccountingData(state.dateYear, state.dateMonth) 
+
+          var list = [];
+          _.forOwn(data.val(), (value, key)=>{
+            value.key = key;
+            list.push(value);
+          });
+
+          state.data = _.orderBy(list, o=>o.created_datetime, 'desc');
+        },
+        async mAdd(state, item){
+            let result = await dao.addItem(item, state.dateYear, state.dateMonth);
+        },
+        async mEdit(state, item){
+            let result = await dao.editItem(item, state.dateYear, state.dateMonth);
         }
     },
     actions:{
@@ -46,8 +69,13 @@ const store = new Vuex.Store({
             // 載入當月資料
             context.commit('mFetch')
         },
-        addItem(context, data){
-            context.state.data.push(data);
+        addItem(context, item){
+            context.commit('mAdd', item);
+            context.commit('mFetch');
+        },
+        editItem(context, item){
+            context.commit('mEdit', item);
+            context.commit('mFetch');
         }
     }
 });

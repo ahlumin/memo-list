@@ -25,7 +25,7 @@ module.exports = {
             {
                 text:/\.js$/,
                 loader:'babel',
-                exclude:['node_modules', 'components']
+                exclude:/node_modules/
             },
             {
                 text:/\.vue$/,

@@ -1,15 +1,19 @@
 <template>      
     <div class="calculate-panel">
-        TOTAL COST:{{ totalCost }}
+        <span>TOTAL </span>
+        <span class="income">INCOME:{{ totalIncome }}</span>
+        <span class="cost">COST:{{ totalCost }}</span>
     </div>
 </template>
 
 <script>
     module.exports={
         computed:{
+            totalIncome(){
+                return this.$store.getters.totalIncome;
+            },
             totalCost(){
-                //TODO:vuex getter
-                return 0;
+                return this.$store.getters.totalCost;
             }
         }
     }
@@ -18,10 +22,26 @@
 <style>
     .calculate-panel{
         display:inline-block;
+        text-align:center;
         position:fixed;
         bottom:0;
+        right:0;
         border:solid 1px black;
-        width:800px;
+        width:100%;
         padding:5px;
+        font-weight:bolder;
+        font-size:36px;
+        background-color:#C1E1A6;
+    }
+
+    .calculate-panel .income{
+        color:blue;
+        font-size:50px;
+        margin:0 30px;
+    }
+
+    .calculate-panel .cost{
+        color:red;
+        font-size:50px;
     }
 </style>
