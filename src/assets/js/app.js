@@ -8641,9 +8641,16 @@
 	        }
 	    },
 	    mutations: {
-	        mLogin: function () {
-	            var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(state) {
-	                var info, data, list;
+	        fetch: function fetch(state, list) {
+	            state.data = _.orderBy(list, function (o) {
+	                return o.created_datetime;
+	            }, 'desc');
+	        }
+	    },
+	    actions: {
+	        login: function () {
+	            var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(context) {
+	                var info;
 	                return regeneratorRuntime.wrap(function _callee$(_context) {
 	                    while (1) {
 	                        switch (_context.prev = _context.next) {
@@ -8654,35 +8661,13 @@
 	                            case 2:
 	                                info = _context.sent;
 
-	                                if (!info) {
-	                                    _context.next = 13;
-	                                    break;
+	                                if (info) {
+	                                    context.state.loginInfo.isLogin = true;
+	                                    context.state.loginInfo.user = info.user.uid;
+	                                    context.dispatch('fetch');
 	                                }
 
-	                                state.loginInfo.isLogin = true;
-	                                state.loginInfo.user = info.user.uid;
-
-	                                _context.next = 8;
-	                                return dao.getAccountingData(state.dateYear, state.dateMonth, state.loginInfo.user);
-
-	                            case 8:
-	                                data = _context.sent;
-
-
-	                                console.log(data);
-
-	                                list = [];
-
-	                                _.forOwn(data.val(), function (value, key) {
-	                                    value.key = key;
-	                                    list.push(value);
-	                                });
-
-	                                state.data = _.orderBy(list, function (o) {
-	                                    return o.created_datetime;
-	                                }, 'desc');
-
-	                            case 13:
+	                            case 4:
 	                            case 'end':
 	                                return _context.stop();
 	                        }
@@ -8690,21 +8675,21 @@
 	                }, _callee, this);
 	            }));
 
-	            function mLogin(_x) {
+	            function login(_x) {
 	                return _ref.apply(this, arguments);
 	            }
 
-	            return mLogin;
+	            return login;
 	        }(),
-	        mFetch: function () {
-	            var _ref2 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(state) {
+	        fetch: function () {
+	            var _ref2 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(context) {
 	                var data, list;
 	                return regeneratorRuntime.wrap(function _callee2$(_context2) {
 	                    while (1) {
 	                        switch (_context2.prev = _context2.next) {
 	                            case 0:
 	                                _context2.next = 2;
-	                                return dao.getAccountingData(state.dateYear, state.dateMonth, state.loginInfo.user);
+	                                return dao.getAccountingData(context.state.dateYear, context.state.dateMonth, context.state.loginInfo.user);
 
 	                            case 2:
 	                                data = _context2.sent;
@@ -8714,10 +8699,7 @@
 	                                    value.key = key;
 	                                    list.push(value);
 	                                });
-
-	                                state.data = _.orderBy(list, function (o) {
-	                                    return o.created_datetime;
-	                                }, 'desc');
+	                                context.commit('fetch', list);
 
 	                            case 6:
 	                            case 'end':
@@ -8727,71 +8709,12 @@
 	                }, _callee2, this);
 	            }));
 
-	            function mFetch(_x2) {
+	            function fetch(_x2) {
 	                return _ref2.apply(this, arguments);
 	            }
 
-	            return mFetch;
+	            return fetch;
 	        }(),
-	        mAdd: function () {
-	            var _ref3 = _asyncToGenerator(regeneratorRuntime.mark(function _callee3(state, item) {
-	                var result;
-	                return regeneratorRuntime.wrap(function _callee3$(_context3) {
-	                    while (1) {
-	                        switch (_context3.prev = _context3.next) {
-	                            case 0:
-	                                _context3.next = 2;
-	                                return dao.addItem(item, state.dateYear, state.dateMonth);
-
-	                            case 2:
-	                                result = _context3.sent;
-
-	                            case 3:
-	                            case 'end':
-	                                return _context3.stop();
-	                        }
-	                    }
-	                }, _callee3, this);
-	            }));
-
-	            function mAdd(_x3, _x4) {
-	                return _ref3.apply(this, arguments);
-	            }
-
-	            return mAdd;
-	        }(),
-	        mEdit: function () {
-	            var _ref4 = _asyncToGenerator(regeneratorRuntime.mark(function _callee4(state, item) {
-	                var result;
-	                return regeneratorRuntime.wrap(function _callee4$(_context4) {
-	                    while (1) {
-	                        switch (_context4.prev = _context4.next) {
-	                            case 0:
-	                                _context4.next = 2;
-	                                return dao.editItem(item, state.dateYear, state.dateMonth);
-
-	                            case 2:
-	                                result = _context4.sent;
-
-	                            case 3:
-	                            case 'end':
-	                                return _context4.stop();
-	                        }
-	                    }
-	                }, _callee4, this);
-	            }));
-
-	            function mEdit(_x5, _x6) {
-	                return _ref4.apply(this, arguments);
-	            }
-
-	            return mEdit;
-	        }()
-	    },
-	    actions: {
-	        login: function login(context) {
-	            context.commit('mLogin');
-	        },
 	        initDate: function initDate(context) {
 	            //初始化日期
 	            var _date = new Date();
@@ -8804,7 +8727,7 @@
 	            _month -= 1;
 	            context.state.dateMonth = _month === 0 ? 12 : _month;
 	            context.state.dateYear = _month === 0 ? context.state.dateYear - 1 : context.state.dateYear;
-	            context.commit('mFetch');
+	            context.dispatch('fetch');
 	        },
 	        nextMonth: function nextMonth(context) {
 	            // 往後一個月
@@ -8812,20 +8735,68 @@
 	            _month += 1;
 	            context.state.dateMonth = _month === 13 ? 1 : _month;
 	            context.state.dateYear = _month === 13 ? context.state.dateYear + 1 : context.state.dateYear;
-	            context.commit('mFetch');
+	            context.dispatch('fetch');
 	        },
-	        fetch: function fetch(context) {
-	            // 載入當月資料
-	            context.commit('mFetch');
-	        },
-	        addItem: function addItem(context, item) {
-	            context.commit('mAdd', item);
-	            context.commit('mFetch');
-	        },
-	        editItem: function editItem(context, item) {
-	            context.commit('mEdit', item);
-	            context.commit('mFetch');
-	        }
+	        addItem: function () {
+	            var _ref3 = _asyncToGenerator(regeneratorRuntime.mark(function _callee3(context, item) {
+	                var result;
+	                return regeneratorRuntime.wrap(function _callee3$(_context3) {
+	                    while (1) {
+	                        switch (_context3.prev = _context3.next) {
+	                            case 0:
+	                                _context3.next = 2;
+	                                return dao.addItem(item, context.state.dateYear, context.state.dateMonth);
+
+	                            case 2:
+	                                result = _context3.sent;
+
+	                                if (result) {
+	                                    context.dispatch('fetch');
+	                                } else {
+	                                    alert('error');
+	                                }
+
+	                            case 4:
+	                            case 'end':
+	                                return _context3.stop();
+	                        }
+	                    }
+	                }, _callee3, this);
+	            }));
+
+	            function addItem(_x3, _x4) {
+	                return _ref3.apply(this, arguments);
+	            }
+
+	            return addItem;
+	        }(),
+	        editItem: function () {
+	            var _ref4 = _asyncToGenerator(regeneratorRuntime.mark(function _callee4(context, item) {
+	                var result;
+	                return regeneratorRuntime.wrap(function _callee4$(_context4) {
+	                    while (1) {
+	                        switch (_context4.prev = _context4.next) {
+	                            case 0:
+	                                _context4.next = 2;
+	                                return dao.editItem(item, context.state.dateYear, context.state.dateMonth);
+
+	                            case 2:
+	                                result = _context4.sent;
+
+	                            case 3:
+	                            case 'end':
+	                                return _context4.stop();
+	                        }
+	                    }
+	                }, _callee4, this);
+	            }));
+
+	            function editItem(_x5, _x6) {
+	                return _ref4.apply(this, arguments);
+	            }
+
+	            return editItem;
+	        }()
 	    }
 	});
 
@@ -33572,6 +33543,9 @@
 	        },
 	        nextMonth: function nextMonth() {
 	            this.$store.dispatch('nextMonth');
+	        },
+	        reload: function reload() {
+	            this.$store.dispatch('fetch');
 	        }
 	    },
 	    created: function created() {
@@ -33590,7 +33564,14 @@
 	    on: {
 	      "click": _vm.lastMonth
 	    }
-	  }, [_vm._v("上")]), _vm._v("\n    " + _vm._s(_vm.date) + "\n    "), _c('button', {
+	  }, [_vm._v("上")]), _vm._v(" "), _c('a', {
+	    attrs: {
+	      "href": "javascript:;"
+	    },
+	    on: {
+	      "click": _vm.reload
+	    }
+	  }, [_vm._v(_vm._s(_vm.date))]), _vm._v(" "), _c('button', {
 	    on: {
 	      "click": _vm.nextMonth
 	    }
@@ -33787,7 +33768,6 @@
 	    },
 	    created: function created() {
 	        this.$store.dispatch('login');
-	        //this.$store.dispatch('fetch');
 	        this.dataAdd.date = '2017/1/14';
 	    }
 	};

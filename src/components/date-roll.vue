@@ -1,7 +1,7 @@
 <template>      
     <div class="date-roll">
         <button @click="lastMonth">上</button>
-        {{ date }}
+        <a href="javascript:;" @click="reload">{{ date }}</a>
         <button @click="nextMonth">下</button>
     </div>
 </template>
@@ -21,6 +21,9 @@
             },
             nextMonth(){
                 this.$store.dispatch('nextMonth');
+            },
+            reload(){
+                this.$store.dispatch('fetch');
             }
         },
         created(){

@@ -1,7 +1,7 @@
 const Vue = require('vue');
 const Vuex = require('vuex');
 const dao = require('data-access-object');
-var _ = require('lodash');
+const _ = require('lodash');
 
 const store = new Vuex.Store({
     state:{
@@ -29,47 +29,29 @@ const store = new Vuex.Store({
         }
     },
     mutations:{
-        async mLogin(state){
+        fetch(state, list){
+          state.data = _.orderBy(list, o=>o.created_datetime, 'desc');
+        }
+    },
+    actions:{
+        async login(context){
             let info = await dao.login();
             if(info)
             {
-                state.loginInfo.isLogin = true;
-                state.loginInfo.user = info.user.uid;
-                
-                var data = await dao.getAccountingData(state.dateYear, state.dateMonth, state.loginInfo.user);
-                
-                console.log(data);
-
-                var list = [];
-                _.forOwn(data.val(), (value, key)=>{
-                    value.key = key;
-                    list.push(value);
-                });
-
-                state.data = _.orderBy(list, o=>o.created_datetime, 'desc');
+                context.state.loginInfo.isLogin = true;
+                context.state.loginInfo.user = info.user.uid;
+                context.dispatch('fetch');
             }
         },
-        async mFetch(state){
-          var data = await dao.getAccountingData(state.dateYear, state.dateMonth, state.loginInfo.user);
-         
+        async fetch(context){
+          var data = await dao.getAccountingData(context.state.dateYear, context.state.dateMonth, context.state.loginInfo.user);
+
           var list = [];
           _.forOwn(data.val(), (value, key)=>{
             value.key = key;
             list.push(value);
           });
-
-          state.data = _.orderBy(list, o=>o.created_datetime, 'desc');
-        },
-        async mAdd(state, item){
-            let result = await dao.addItem(item, state.dateYear, state.dateMonth);
-        },
-        async mEdit(state, item){
-            let result = await dao.editItem(item, state.dateYear, state.dateMonth);
-        }
-    },
-    actions:{
-        login(context){
-            context.commit('mLogin');
+          context.commit('fetch', list)
         },
         initDate(context){
             //初始化日期
@@ -83,7 +65,7 @@ const store = new Vuex.Store({
             _month -= 1;
             context.state.dateMonth = _month === 0 ? 12 : _month;
             context.state.dateYear = _month === 0 ? context.state.dateYear - 1 : context.state.dateYear;
-            context.commit('mFetch')
+            context.dispatch('fetch');
         },
         nextMonth(context){
             // 往後一個月
@@ -91,19 +73,19 @@ const store = new Vuex.Store({
             _month += 1;
             context.state.dateMonth = _month === 13 ? 1 : _month;
             context.state.dateYear = _month === 13 ? context.state.dateYear + 1 : context.state.dateYear;      
-            context.commit('mFetch')
+            context.dispatch('fetch')
         },
-        fetch(context){
-            // 載入當月資料
-            context.commit('mFetch')
+        async addItem(context, item){
+            let result = await dao.addItem(item, context.state.dateYear, context.state.dateMonth);
+            if(result){
+                context.dispatch('fetch');
+            }
+            else{
+                alert('error');
+            }
         },
-        addItem(context, item){
-            context.commit('mAdd', item);
-            context.commit('mFetch');
-        },
-        editItem(context, item){
-            context.commit('mEdit', item);
-            context.commit('mFetch');
+        async editItem(context, item){
+            let result = await dao.editItem(item, context.state.dateYear, context.state.dateMonth);
         }
     }
 });
