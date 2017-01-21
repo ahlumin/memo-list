@@ -14,6 +14,10 @@ const store = new Vuex.Store({
             type:Number,
             value:null
         },
+        dateDay:{
+            type:Number,
+            value:null
+        },
         loginInfo:{
             isLogin:false,
             user:'',
@@ -58,6 +62,7 @@ const store = new Vuex.Store({
             let _date = new Date();
             context.state.dateYear = _date.getFullYear();
             context.state.dateMonth = _date.getMonth() + 1;
+            context.state.dateDay = _date.getDate();
         },
         lastMonth(context){
             // 往前一個月

@@ -79,8 +79,8 @@
             }
         },
         created(){
-            this.$store.dispatch('login');
-            this.dataAdd.date = '2017/1/14';
+            //this.$store.dispatch('login');
+            this.dataAdd.date = this.$store.state.dateYear + '/' + this.$store.state.dateMonth + '/' + this.$store.state.dateDay;
         }
     }
 </script>
@@ -99,15 +99,15 @@
             display: inline-block;
         }
 
-        .item-list input.right{
-            text-align:right;
-            width:100px;
-        }
-
     .item-list .item{
         display: inline-block;
         width:380px;
     }
+        .item-list .item input{
+            width:380px;
+            text-align:left;
+        }
+        
         .item-list .error{
             background-color:red;
         }
@@ -126,13 +126,18 @@
 
     .item-list .isCredit{
         display: inline-block;
-        width:70px;
+        width:100px;
         text-align:center;
     }
 
     .item-list .datetime{
         display: inline-block;
-        width:130px;
+        width:100px;
         text-align:right;
+    }
+
+    .item-list input{
+        text-align:right;
+        width:100px;
     }
 </style>

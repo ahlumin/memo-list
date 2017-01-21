@@ -8622,6 +8622,10 @@
 	            type: Number,
 	            value: null
 	        },
+	        dateDay: {
+	            type: Number,
+	            value: null
+	        },
 	        loginInfo: {
 	            isLogin: false,
 	            user: '',
@@ -8720,6 +8724,7 @@
 	            var _date = new Date();
 	            context.state.dateYear = _date.getFullYear();
 	            context.state.dateMonth = _date.getMonth() + 1;
+	            context.state.dateDay = _date.getDate();
 	        },
 	        lastMonth: function lastMonth(context) {
 	            // 往前一個月
@@ -33509,7 +33514,7 @@
 
 
 	// module
-	exports.push([module.id, "\n.date-roll{\n    border:solid 1px black;\n    margin-top:15px;\n    padding:5px;\n}\n", ""]);
+	exports.push([module.id, "\n.date-roll{\n    height:40px;\n    margin:15px 0;\n    padding:5px;\n}\n.date-roll span{\n    float:left;\n    font-weight:bolder;\n}\n.date-roll span.center{\n    width:80%;\n    text-align:center;\n    font-size:36px;\n}\n.date-roll span.left{\n    width:10%;\n}\n.date-roll span.right{\n    width:10%;\n}\n", ""]);
 
 	// exports
 
@@ -33520,6 +33525,10 @@
 
 	'use strict';
 
+	//
+	//
+	//
+	//
 	//
 	//
 	//
@@ -33560,22 +33569,40 @@
 	module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
 	  return _c('div', {
 	    staticClass: "date-roll"
-	  }, [_c('button', {
+	  }, [_c('span', {
+	    staticClass: "left"
+	  }, [_c('a', {
+	    attrs: {
+	      "href": "javascript:;"
+	    },
 	    on: {
-	      "click": _vm.lastMonth
+	      "click": function($event) {
+	        $event.preventDefault();
+	        _vm.lastMonth($event)
+	      }
 	    }
-	  }, [_vm._v("上")]), _vm._v(" "), _c('a', {
+	  }, [_vm._v("上個月")])]), _vm._v(" "), _c('span', {
+	    staticClass: "center"
+	  }, [_c('a', {
 	    attrs: {
 	      "href": "javascript:;"
 	    },
 	    on: {
 	      "click": _vm.reload
 	    }
-	  }, [_vm._v(_vm._s(_vm.date))]), _vm._v(" "), _c('button', {
+	  }, [_vm._v(_vm._s(_vm.date))])]), _vm._v(" "), _c('span', {
+	    staticClass: "right"
+	  }, [_c('a', {
+	    attrs: {
+	      "href": "javascript:;"
+	    },
 	    on: {
-	      "click": _vm.nextMonth
+	      "click": function($event) {
+	        $event.preventDefault();
+	        _vm.nextMonth($event)
+	      }
 	    }
-	  }, [_vm._v("下")])])
+	  }, [_vm._v("下個月")])])])
 	},staticRenderFns: []}
 	module.exports.render._withStripped = true
 	if (false) {
@@ -33675,7 +33702,7 @@
 
 
 	// module
-	exports.push([module.id, "\n.item-list{\n    padding-bottom:77px;\n}\n.item-list li{\n        margin:15px 0;\n}\n.item-list input{\n        background-color:#F6F6F6;\n        border:0px;\n        border-bottom:solid 1px #3B3738;\n        display: inline-block;\n}\n.item-list input.right{\n        text-align:right;\n        width:100px;\n}\n.item-list .item{\n    display: inline-block;\n    width:380px;\n}\n.item-list .error{\n        background-color:red;\n}\n.item-list .income{\n    display: inline-block;\n    width:100px;\n    text-align:right;\n}\n.item-list .cost{\n    display: inline-block;\n    width:100px;\n    text-align:right;\n}\n.item-list .isCredit{\n    display: inline-block;\n    width:70px;\n    text-align:center;\n}\n.item-list .datetime{\n    display: inline-block;\n    width:130px;\n    text-align:right;\n}\n", ""]);
+	exports.push([module.id, "\n.item-list{\n    padding-bottom:77px;\n}\n.item-list li{\n        margin:15px 0;\n}\n.item-list input{\n        background-color:#F6F6F6;\n        border:0px;\n        border-bottom:solid 1px #3B3738;\n        display: inline-block;\n}\n.item-list .item{\n    display: inline-block;\n    width:380px;\n}\n.item-list .item input{\n        width:380px;\n        text-align:left;\n}\n.item-list .error{\n        background-color:red;\n}\n.item-list .income{\n    display: inline-block;\n    width:100px;\n    text-align:right;\n}\n.item-list .cost{\n    display: inline-block;\n    width:100px;\n    text-align:right;\n}\n.item-list .isCredit{\n    display: inline-block;\n    width:100px;\n    text-align:center;\n}\n.item-list .datetime{\n    display: inline-block;\n    width:100px;\n    text-align:right;\n}\n.item-list input{\n    text-align:right;\n    width:100px;\n}\n", ""]);
 
 	// exports
 
@@ -33767,8 +33794,8 @@
 	        }
 	    },
 	    created: function created() {
-	        this.$store.dispatch('login');
-	        this.dataAdd.date = '2017/1/14';
+	        //this.$store.dispatch('login');
+	        this.dataAdd.date = this.$store.state.dateYear + '/' + this.$store.state.dateMonth + '/' + this.$store.state.dateDay;
 	    }
 	};
 
@@ -34156,7 +34183,7 @@
 
 
 	// module
-	exports.push([module.id, "\n.calculate-panel{\n    display:inline-block;\n    text-align:center;\n    position:fixed;\n    bottom:0;\n    right:0;\n    border:solid 1px black;\n    width:100%;\n    padding:5px;\n    font-weight:bolder;\n    font-size:36px;\n    background-color:#C1E1A6;\n}\n.calculate-panel .income{\n    color:blue;\n    font-size:50px;\n    margin:0 30px;\n}\n.calculate-panel .cost{\n    color:red;\n    font-size:50px;\n}\n", ""]);
+	exports.push([module.id, "\n.calculate-panel{\n    display:inline-block;\n    text-align:center;\n    position:fixed;\n    bottom:0;\n    right:0;\n    width:100%;\n    padding:5px;\n    font-weight:bolder;\n    font-size:36px;\n    background-color:#C1E1A6;\n}\n.calculate-panel .income{\n    color:blue;\n    font-size:50px;\n    margin:0 30px;\n}\n.calculate-panel .cost{\n    color:red;\n    font-size:50px;\n}\n", ""]);
 
 	// exports
 
@@ -34184,6 +34211,11 @@
 	        totalCost: function totalCost() {
 	            return this.$store.getters.totalCost;
 	        }
+	    },
+	    filters: {
+	        numberWithCommas: function numberWithCommas(val) {
+	            return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	        }
 	    }
 	};
 
@@ -34196,9 +34228,9 @@
 	    staticClass: "calculate-panel"
 	  }, [_c('span', [_vm._v("TOTAL ")]), _vm._v(" "), _c('span', {
 	    staticClass: "income"
-	  }, [_vm._v("INCOME:" + _vm._s(_vm.totalIncome))]), _vm._v(" "), _c('span', {
+	  }, [_vm._v("INCOME:" + _vm._s(_vm._f("numberWithCommas")(_vm.totalIncome)))]), _vm._v(" "), _c('span', {
 	    staticClass: "cost"
-	  }, [_vm._v("COST:" + _vm._s(_vm.totalCost))])])
+	  }, [_vm._v("COST:" + _vm._s(_vm._f("numberWithCommas")(_vm.totalCost)))])])
 	},staticRenderFns: []}
 	module.exports.render._withStripped = true
 	if (false) {
