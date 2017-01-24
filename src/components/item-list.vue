@@ -79,7 +79,7 @@
             }
         },
         created(){
-            //this.$store.dispatch('login');
+            this.$store.dispatch('login');
             this.dataAdd.date = this.$store.state.dateYear + '/' + this.$store.state.dateMonth + '/' + this.$store.state.dateDay;
         }
     }

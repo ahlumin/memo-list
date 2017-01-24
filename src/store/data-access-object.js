@@ -14,6 +14,20 @@ firebase.initializeApp({
 
 var dao = module.exports = {};
 
+dao.checkAuth = () =>{
+    return new Promise((resolve,reject)=>{
+        firebase.auth().onAuthStateChanged(user=>{
+            if(user){
+                resolve(true);
+            }
+            else
+            {
+                resolve(false);
+            }
+        });
+    });
+}
+
 dao.login = () =>{
     var provider = new firebase.auth.GithubAuthProvider();
     provider.addScope('repo');

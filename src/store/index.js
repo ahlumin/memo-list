@@ -39,6 +39,14 @@ const store = new Vuex.Store({
     },
     actions:{
         async login(context){
+            
+            let check = await dao.checkAuth();
+            if(check)
+            {
+                context.dispatch('fetch');
+                return;
+            }
+
             let info = await dao.login();
             if(info)
             {
@@ -46,16 +54,19 @@ const store = new Vuex.Store({
                 context.state.loginInfo.user = info.user.uid;
                 context.dispatch('fetch');
             }
+
+
         },
         async fetch(context){
-          var data = await dao.getAccountingData(context.state.dateYear, context.state.dateMonth, context.state.loginInfo.user);
 
-          var list = [];
-          _.forOwn(data.val(), (value, key)=>{
-            value.key = key;
-            list.push(value);
-          });
-          context.commit('fetch', list)
+            var data = await dao.getAccountingData(context.state.dateYear, context.state.dateMonth, context.state.loginInfo.user);
+
+            var list = [];
+            _.forOwn(data.val(), (value, key)=>{
+                value.key = key;
+                list.push(value);
+            });
+            context.commit('fetch', list)
         },
         initDate(context){
             //初始化日期

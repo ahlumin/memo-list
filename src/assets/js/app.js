@@ -8654,15 +8654,30 @@
 	    actions: {
 	        login: function () {
 	            var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(context) {
-	                var info;
+	                var check, info;
 	                return regeneratorRuntime.wrap(function _callee$(_context) {
 	                    while (1) {
 	                        switch (_context.prev = _context.next) {
 	                            case 0:
 	                                _context.next = 2;
-	                                return dao.login();
+	                                return dao.checkAuth();
 
 	                            case 2:
+	                                check = _context.sent;
+
+	                                if (!check) {
+	                                    _context.next = 6;
+	                                    break;
+	                                }
+
+	                                context.dispatch('fetch');
+	                                return _context.abrupt('return');
+
+	                            case 6:
+	                                _context.next = 8;
+	                                return dao.login();
+
+	                            case 8:
 	                                info = _context.sent;
 
 	                                if (info) {
@@ -8671,7 +8686,7 @@
 	                                    context.dispatch('fetch');
 	                                }
 
-	                            case 4:
+	                            case 10:
 	                            case 'end':
 	                                return _context.stop();
 	                        }
@@ -15736,6 +15751,18 @@
 	});
 
 	var dao = module.exports = {};
+
+	dao.checkAuth = function () {
+	    return new Promise(function (resolve, reject) {
+	        firebase.auth().onAuthStateChanged(function (user) {
+	            if (user) {
+	                resolve(true);
+	            } else {
+	                resolve(false);
+	            }
+	        });
+	    });
+	};
 
 	dao.login = function () {
 	    var provider = new firebase.auth.GithubAuthProvider();
@@ -33794,7 +33821,7 @@
 	        }
 	    },
 	    created: function created() {
-	        //this.$store.dispatch('login');
+	        this.$store.dispatch('login');
 	        this.dataAdd.date = this.$store.state.dateYear + '/' + this.$store.state.dateMonth + '/' + this.$store.state.dateDay;
 	    }
 	};
