@@ -63,6 +63,11 @@
                 item.created_datetime = _tempDate[0] + '/' + ('00' + _tempDate[1]).slice(-2) + '/' + ('00' + _tempDate[2]).slice(-2);
                 
                 this.$store.dispatch('addItem', item)
+                
+                this.dataAdd.item = '',
+                this.dataAdd.income = null;
+                this.dataAdd.cost = null;
+                this.dataAdd.isCredit = false;
             },
             edit(dataEdit){
                 
