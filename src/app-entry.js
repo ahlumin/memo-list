@@ -1,6 +1,12 @@
-new Vue({
+import Vue from 'vue';
+import Vuex from 'vuex';
+import "babel-polyfill";
+
+Vue.use(Vuex);
+
+var app = new Vue({
     el:'#main',
-    components:{
-        app:require('app')
+    render(h){
+        return h(require('./components/app'));
     }
-})
+});

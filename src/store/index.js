@@ -1,7 +1,6 @@
-const Vue = require('vue');
 const Vuex = require('vuex');
-const dao = require('data-access-object');
-const _ = require('lodash');
+const dao = require('./data-access-object');
+
 
 const store = new Vuex.Store({
     state:{
@@ -39,7 +38,7 @@ const store = new Vuex.Store({
     },
     actions:{
         async login(context){
-            
+
             let check = await dao.checkAuth();
             if(check)
             {
@@ -88,7 +87,7 @@ const store = new Vuex.Store({
             let _month = context.state.dateMonth;
             _month += 1;
             context.state.dateMonth = _month === 13 ? 1 : _month;
-            context.state.dateYear = _month === 13 ? context.state.dateYear + 1 : context.state.dateYear;      
+            context.state.dateYear = _month === 13 ? context.state.dateYear + 1 : context.state.dateYear;
             context.dispatch('fetch')
         },
         async addItem(context, item){

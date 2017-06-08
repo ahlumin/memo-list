@@ -8,11 +8,11 @@
 
 <script>
     module.exports ={
-        store:require('../store'),
+        store:require('../store/index.js'),
         components:{
-            dateRoll:require('date-roll'),
-            itemList:require('item-list'),
-            calculatePanel:require('calculate-panel')
+            dateRoll:require('./date-roll'),
+            itemList:require('./item-list'),
+            calculatePanel:require('./calculate-panel')
         }
     }
 </script>
@@ -26,4 +26,3 @@
         background-color:red;
     }
 </style>
-
