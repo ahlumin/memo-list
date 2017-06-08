@@ -22,10 +22,12 @@ module.exports = {
             {
                 test:/\.vue$/,
                 loader:'vue-loader',
+                include:[path.resolve(__dirname, 'src/components')]
             },
             {
                 test:/\.js/,
-                loader:'babel-loader'
+                loader:'babel-loader',
+                include:[path.resolve(__dirname, 'src')]
             }
         ]
     }
