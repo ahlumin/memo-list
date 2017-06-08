@@ -1,4 +1,4 @@
-<template>      
+<template>
     <div class="calculate-panel">
         <span>TOTAL </span>
         <span class="income">INCOME:{{ totalIncome | numberWithCommas }}</span>

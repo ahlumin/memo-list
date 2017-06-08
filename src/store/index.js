@@ -25,10 +25,14 @@ const store = new Vuex.Store({
     },
     getters:{
         totalIncome:state => {
-            return _.sumBy(state.data, o => o.income);
+            return state.data.reduce((acu, cur,idx,arr)=>{
+                return acu += parseInt(cur.income)
+            }, 0);
         },
         totalCost: state => {
-            return _.sumBy(state.data, o => o.cost);
+            return state.data.reduce((acu, cur,idx,arr)=>{
+                return acu += parseInt(cur.cost)
+            }, 0);
         }
     },
     mutations:{

@@ -12225,14 +12225,14 @@ var store = new Vuex.Store({
     },
     getters: {
         totalIncome: function totalIncome(state) {
-            return _.sumBy(state.data, function (o) {
-                return o.income;
-            });
+            return state.data.reduce(function (acu, cur, idx, arr) {
+                return acu += parseInt(cur.income);
+            }, 0);
         },
         totalCost: function totalCost(state) {
-            return _.sumBy(state.data, function (o) {
-                return o.cost;
-            });
+            return state.data.reduce(function (acu, cur, idx, arr) {
+                return acu += parseInt(cur.cost);
+            }, 0);
         }
     },
     mutations: {
