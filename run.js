@@ -3,7 +3,7 @@ var path = require('path');
 var express = require('express');
 
 const app = express();
-app.use('/src', express.static('dist'));
+app.use('/dist', express.static('dist'));
 
 
 app.get('/', function(req,res){
