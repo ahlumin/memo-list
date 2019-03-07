@@ -71,7 +71,7 @@ const config = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      filename: path.resolve(__dirname, "index.html"),
+      filename: "index.html",
       template: "index.html"
     }),
     new CopyWebpackPlugin([
