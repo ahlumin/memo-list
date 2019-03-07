@@ -6,7 +6,7 @@ const cx = classnames.bind(style);
 
 export default class Home extends React.Component {
   render() {
-    return 1 === 0 ? (
+    return 1 === 1 ? (
       <div className={cx("main")}>From App Yo.!</div>
     ) : (
       <SignIn />
