@@ -1,0 +1,4 @@
+{
+  "extends": "stylelint-config-standard",
+  "ignoreFiles": ["**/*.js", "src/assets/styles/reset.css"]
+}
