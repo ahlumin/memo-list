@@ -5,6 +5,11 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = merge(common, {
   mode: "production",
+  output: {
+    path: path.resolve(__dirname),
+    filename: "[name].js?[hash:8]",
+    publicPath: "/"
+  },
   plugins: [
     new HtmlWebpackPlugin({
       filename: path.resolve(__dirname, "index.html"),

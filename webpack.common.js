@@ -8,11 +8,6 @@ const config = {
   entry: {
     main: "main"
   },
-  output: {
-    path: path.resolve(__dirname, "dist"),
-    filename: "js/[name].js?[hash:8]",
-    publicPath: "/"
-  },
   optimization: {
     splitChunks: {
       cacheGroups: {
