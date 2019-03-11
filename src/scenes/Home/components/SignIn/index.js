@@ -1,7 +1,7 @@
 import React from "react";
 import classnames from "classnames/bind";
 import style from "./style.scss";
-import { Authentication } from "services";
+import { Authentication, DAO } from "services";
 const cx = classnames.bind(style);
 
 export default class SignIn extends React.Component {
@@ -13,16 +13,24 @@ export default class SignIn extends React.Component {
     this.handleClick();
   }
 
-  handleClick = () => {
-    Authentication.signIn()
-      .then(result => {
-        const { uid, email } = result.user;
-      })
-      .catch(error => {
-        this.setState({
-          hadClosedPopUp: true
-        });
+  handleClick = async () => {
+    const { onDone } = this.props;
+
+    try {
+      const signInResult = await Authentication.signIn();
+      const { uid, email } = signInResult.user;
+      const hasUser = await DAO.checkUserExist(email);
+
+      if (hasUser === false) {
+        const registerResult = await DAO.registerUser(uid, email);
+      }
+
+      onDone(true, false);
+    } catch (error) {
+      this.setState({
+        hadClosedPopUp: true
       });
+    }
   };
 
   render() {
