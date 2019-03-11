@@ -14,10 +14,13 @@ function selectUser(email) {
 }
 
 function addUser(uid, email) {
-  return db.collection("users").add({
-    email,
-    uid
-  });
+  return db
+    .collection("users")
+    .doc(email)
+    .set({
+      email,
+      uid
+    });
 }
 
 export default {
