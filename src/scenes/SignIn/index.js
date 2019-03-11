@@ -1,10 +1,15 @@
 import React from "react";
+import PropTypes from "prop-types";
 import classnames from "classnames/bind";
 import style from "./style.scss";
 import { Authentication, DAO } from "services";
 const cx = classnames.bind(style);
 
 export default class SignIn extends React.Component {
+  static propTypes = {
+    onSignIn: PropTypes.func.isRequired
+  };
+
   state = {
     hadClosedPopUp: false
   };
@@ -14,7 +19,7 @@ export default class SignIn extends React.Component {
   }
 
   handleClick = async () => {
-    const { onDone } = this.props;
+    const { onSignIn } = this.props;
 
     try {
       const signInResult = await Authentication.signIn();
@@ -22,10 +27,10 @@ export default class SignIn extends React.Component {
       const hasUser = await DAO.checkUserExist(email);
 
       if (hasUser === false) {
-        const registerResult = await DAO.registerUser(uid, email);
+        await DAO.registerUser(uid, email);
       }
 
-      onDone(true, false);
+      onSignIn(uid, email);
     } catch (error) {
       this.setState({
         hadClosedPopUp: true
