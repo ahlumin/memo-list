@@ -13,10 +13,10 @@ function selectUser(email) {
     .get();
 }
 
-function addUser() {
+function addUser(uid, email) {
   return db.collection("users").add({
-    email: "test@abc.com",
-    idToken: "asdfsdfsd"
+    email,
+    uid
   });
 }
 
