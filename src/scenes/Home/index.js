@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import classnames from "classnames/bind";
 import style from "./style.scss";
+const TODAY = new Date();
 
 const cx = classnames.bind(style);
 
@@ -12,6 +13,8 @@ export default class Home extends React.Component {
   };
 
   state = {
+    year: TODAY.getFullYear(),
+    month: TODAY.getMonth + 1,
     records: []
   };
 
