@@ -10,9 +10,13 @@ export default function App() {
   useEffect(() => {
     async function fetchUserInfo() {
       const hasAuth = await Authentication.checkAuth();
-      const { uid, email } = Authentication.getUserInfo();
-      setUser({ hasAuth, uid, email });
-      setApp({ isLoading: false });
+
+      if (hasAuth) {
+        const { uid, email } = Authentication.getUserInfo();
+        setUser({ hasAuth, uid, email });
+      }
+
+      setApp(state => ({ ...state, isLoading: false }));
     }
 
     fetchUserInfo();
@@ -25,9 +29,9 @@ export default function App() {
       case false:
         return (
           <SignIn
-            onSignIn={(uid, email) => {
-              setUser({ hasAuth: true, uid, email });
-            }}
+            isCloseLogInPop={app.isCloseLogInPop}
+            setApp={setApp}
+            setUser={setUser}
           />
         );
     }
