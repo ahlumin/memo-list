@@ -23,8 +23,34 @@ function addUser(uid, email) {
     });
 }
 
+function selectRecords(email, year, month) {
+  return db
+    .collection("users")
+    .doc(email)
+    .collection("records")
+    .where("year", "==", year)
+    .where("month", "==", month)
+    .get();
+}
+
+function addRecord(email, year, month, day, consume, isCredit) {
+  return db
+    .collection("users")
+    .doc(email)
+    .collection("records")
+    .add({
+      year,
+      month,
+      day,
+      consume,
+      isCredit
+    });
+}
+
 export default {
   selectUsers,
   selectUser,
-  addUser
+  addUser,
+  selectRecords,
+  addRecord
 };
