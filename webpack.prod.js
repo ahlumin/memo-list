@@ -8,7 +8,7 @@ module.exports = merge(common, {
   output: {
     path: path.resolve(__dirname),
     filename: "[name].js?[hash:8]",
-    publicPath: "/"
+    publicPath: "https://ahlumin.github.io/accounting/"
   },
   plugins: [
     new HtmlWebpackPlugin({
