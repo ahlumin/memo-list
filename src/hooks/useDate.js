@@ -8,6 +8,7 @@ export default function useDate() {
   const month = currentMonth;
 
   const [dateInfo, setDateInfo] = useState({
+    today,
     currentYear,
     currentMonth,
     year,
