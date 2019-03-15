@@ -14,6 +14,16 @@ function transformUsers(querySnapshot) {
   return data;
 }
 
+function transformRecords(querySnapshot) {
+  const data = { ids: [] };
+  querySnapshot.forEach(doc => {
+    data[doc.id] = Object.assign({}, doc.data());
+    data.ids.push(doc.id);
+  });
+  return data;
+}
+
 export default {
-  transformUsers
+  transformUsers,
+  transformRecords
 };
