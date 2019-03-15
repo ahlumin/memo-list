@@ -1,51 +1,41 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Home, SignIn } from "scenes";
 import { Authentication } from "services";
+import { useUser, useAppState } from "hooks";
 
-export default class App extends React.Component {
-  state = {
-    uid: "",
-    email: "",
-    isLoading: true,
-    hasAuth: false
-  };
+export default function App() {
+  const [user, setUser] = useUser();
+  const [app, setApp] = useAppState();
 
-  componentDidMount() {
-    (async function(self) {
+  useEffect(() => {
+    async function fetchUserInfo() {
       const hasAuth = await Authentication.checkAuth();
       const { uid, email } = Authentication.getUserInfo();
+      setUser({ hasAuth, uid, email });
+      setApp({ isLoading: false });
+    }
 
-      self.setState({
-        isLoading: false,
-        hasAuth,
-        uid,
-        email
-      });
-    })(this);
-  }
+    fetchUserInfo();
+  }, []);
 
-  handleSignIn = (uid, email) => {
-    this.setState({
-      uid,
-      email
-    });
-  };
-
-  switchPage = (hasAuth, uid, email) => {
+  function switchPage(hasAuth, uid, email) {
     switch (hasAuth) {
       case true:
         return <Home uid={uid} email={email} />;
       case false:
-        return <SignIn onSignIn={this.handleSignIn} />;
+        return (
+          <SignIn
+            onSignIn={(uid, email) => {
+              setUser({ hasAuth: true, uid, email });
+            }}
+          />
+        );
     }
-  };
-
-  render() {
-    const { isLoading, hasAuth, uid, email } = this.state;
-    return isLoading ? (
-      <div>Loading la</div>
-    ) : (
-      this.switchPage(hasAuth, uid, email)
-    );
   }
+
+  return app.isLoading ? (
+    <div>Loading la</div>
+  ) : (
+    switchPage(user.hasAuth, user.uid, user.email)
+  );
 }
