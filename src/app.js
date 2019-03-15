@@ -22,10 +22,10 @@ export default function App() {
     fetchUserInfo();
   }, []);
 
-  function switchPage(hasAuth, uid, email) {
-    switch (hasAuth) {
+  function switchPage(app, user) {
+    switch (user.hasAuth) {
       case true:
-        return <Home uid={uid} email={email} />;
+        return <Home app={app} user={user} setApp={setApp} setUser={setUser} />;
       case false:
         return (
           <SignIn
@@ -37,9 +37,5 @@ export default function App() {
     }
   }
 
-  return app.isLoading ? (
-    <div>Loading la</div>
-  ) : (
-    switchPage(user.hasAuth, user.uid, user.email)
-  );
+  return app.isLoading ? <div>Loading la</div> : switchPage(app, user);
 }
