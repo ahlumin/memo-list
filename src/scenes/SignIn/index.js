@@ -1,17 +1,33 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 import classnames from "classnames/bind";
 import style from "./style.scss";
 import { Authentication, DAO } from "services";
-import useSignInCb from "./hooks/useSignInCb.js";
 const cx = classnames.bind(style);
 
 function SignIn({ isCloseLogInPop, setApp, setUser }) {
-  const onClick = useSignInCb(Authentication, DAO, setApp, setUser);
+  const onSignIn = useCallback(() => {
+    (async () => {
+      try {
+        const signInResult = await Authentication.signIn();
+        const { uid, email } = signInResult.user;
+        const hasUser = await DAO.checkUserExist(email);
+
+        if (hasUser === false) {
+          await DAO.registerUser(uid, email);
+        }
+
+        setUser({ hasAuth: true, uid, email });
+      } catch (error) {
+        // TODO: should be refactored by switch case syntax with every error type;
+        setApp(state => ({ ...state, isCloseLogInPop: true }));
+      }
+    })();
+  }, [setApp, setUser]);
 
   useEffect(() => {
-    onClick();
-  }, []);
+    onSignIn();
+  }, [onSignIn]);
 
   return (
     <div className={cx("sign-in")}>
@@ -21,7 +37,7 @@ function SignIn({ isCloseLogInPop, setApp, setUser }) {
         the URL bar.
       </span>
 
-      {isCloseLogInPop && <button onClick={onClick}>sign in</button>}
+      {isCloseLogInPop && <button onClick={onSignIn}>sign in</button>}
     </div>
   );
 }
