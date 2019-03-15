@@ -1,0 +1,7 @@
+.field {
+  visibility: hidden;
+
+  &.show {
+    visibility: visible;
+  }
+}
