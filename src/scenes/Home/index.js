@@ -3,16 +3,13 @@ import PropTypes from "prop-types";
 import classnames from "classnames/bind";
 import style from "./style.scss";
 import { Header, Loading, Record, Field } from "components";
-import { useDate, useRecords, useInput } from "hooks";
+import { useDate, useRecords } from "hooks";
 import { DAO } from "services";
 const cx = classnames.bind(style);
 
 function Home({ app, user, setApp }) {
   const [records, setRecords] = useRecords();
   const [date, setDate] = useDate();
-  const [day, setDay] = useInput(date.today.getDate());
-  const [consume, setConsume] = useInput(0);
-  const [isCredit, setIsCredit] = useInput(false);
   const { year, month } = date;
   const { email } = user;
   const { isFetching, isShowInput } = app;
@@ -30,48 +27,18 @@ function Home({ app, user, setApp }) {
     setApp(state => ({ ...state, isShowInput: !state.isShowInput }));
   }, [setApp]);
 
-  function onSubmit() {
-    setApp(state => ({ ...state, isFetching: true }));
-
-    DAO.addRecord(email, year, month, day, consume, isCredit)
-      .then(result => {
-        setRecords(state => {
-          const ids = state.ids.slice();
-          ids.push(result.id);
-
-          return {
-            ...state,
-            [result.id]: {
-              year,
-              month,
-              day,
-              isCredit,
-              consume
-            },
-            ids
-          };
-        });
-        setApp(state => ({ ...state, isFetching: false, isShowInput: false }));
-      })
-      .catch(error => {
-        console.log("error in Field", error);
-        alert("oops! record added fail");
-      });
-  }
-
   return (
     <>
       <Header date={date} setDate={setDate} />
       <div className={cx("main")}>
         <Field
-          day={day}
-          consume={consume}
-          isCredit={isCredit}
-          setDay={setDay}
-          setConsume={setConsume}
-          setIsCredit={setIsCredit}
+          email={email}
+          year={year}
+          month={month}
+          date={date}
           isShowInput={isShowInput}
-          onSubmit={onSubmit}
+          setApp={setApp}
+          setRecords={setRecords}
         />
 
         {isFetching ? (
