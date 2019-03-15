@@ -54,8 +54,8 @@
     "classnames": "^2.2.6",
     "firebase": "^5.8.5",
     "promise-polyfill": "^8.1.0",
-    "react": "^16.4.1",
-    "react-dom": "^16.4.1",
+    "react": "^16.8.4",
+    "react-dom": "^16.8.4",
     "redux": "^4.0.0"
   }
 }
