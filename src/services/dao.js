@@ -17,8 +17,28 @@ async function registerUser(uid, email) {
   return result;
 }
 
+async function selectRecords(email, year, month) {
+  const querySnapshot = await FireStore.selectRecords(email, year, month);
+  const records = Transform.transformRecords(querySnapshot);
+  return records;
+}
+
+async function addRecord(email, year, month, day, consume, isCredit) {
+  const result = await FireStore.addRecord(
+    email,
+    year,
+    month,
+    day,
+    consume,
+    isCredit
+  );
+  return result;
+}
+
 export default {
   selectUsers,
   checkUserExist,
-  registerUser
+  registerUser,
+  selectRecords,
+  addRecord
 };
