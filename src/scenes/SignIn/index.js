@@ -27,7 +27,7 @@ function SignIn({ isCloseLogInPop, setApp, setUser }) {
 
   useEffect(() => {
     onSignIn();
-  }, [onSignIn]);
+  }, []); // eslint-disable-line
 
   return (
     <div className={cx("sign-in")}>

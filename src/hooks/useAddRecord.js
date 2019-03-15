@@ -8,7 +8,6 @@ import { useCallback } from "react";
  * @param {number} day
  * @param {number} consume
  * @param {bool} isCredit
- * @param {function} setApp
  * @param {function} setRecords
  * @param {object} DAO
  */
@@ -19,12 +18,11 @@ export default function useAddRecord(
   day,
   consume,
   isCredit,
-  setApp,
   setRecords,
   DAO
 ) {
   return useCallback(() => {
-    setApp(state => ({ ...state, isFetching: true }));
+    setRecords(state => ({ ...state, isUpdating: true, isShowField: false }));
 
     DAO.addRecord(email, year, month, day, consume, isCredit)
       .then(result => {
@@ -41,14 +39,15 @@ export default function useAddRecord(
               isCredit,
               consume
             },
-            ids
+            ids,
+            isUpdating: false,
+            isShowField: false
           };
         });
-        setApp(state => ({ ...state, isFetching: false, isShowInput: false }));
       })
       .catch(error => {
         console.error("error in Field", error);
         alert("oops! record added fail");
       });
-  }, [DAO, consume, day, email, isCredit, month, setApp, setRecords, year]);
+  }, [DAO, consume, day, email, isCredit, month, setRecords, year]);
 }

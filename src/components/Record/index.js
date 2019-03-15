@@ -17,7 +17,11 @@ function Record({ record }) {
 }
 
 Record.propTypes = {
-  record: PropTypes.object.isRequired
+  record: PropTypes.shape({
+    day: PropTypes.number.isRequired,
+    consume: PropTypes.number.isRequired,
+    isCredit: PropTypes.bool.isRequired
+  })
 };
 
 export default Record;
