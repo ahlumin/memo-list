@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 import classnames from "classnames/bind";
 import style from "./style.scss";
@@ -24,11 +24,11 @@ function Home({ app, user, setApp }) {
       setRecords(result);
       setApp(state => ({ ...state, isFetching: false }));
     });
-  }, [email, year, month]);
+  }, [email, year, month, setApp, setRecords]);
 
-  function onToggleInput() {
+  const onToggleInput = useCallback(() => {
     setApp(state => ({ ...state, isShowInput: !state.isShowInput }));
-  }
+  }, [setApp]);
 
   function onSubmit() {
     setApp(state => ({ ...state, isFetching: true }));

@@ -20,7 +20,7 @@ export default function App() {
     }
 
     fetchUserInfo();
-  }, []);
+  }, [setApp, setUser]);
 
   function switchPage(app, user) {
     switch (user.hasAuth) {

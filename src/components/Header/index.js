@@ -15,7 +15,7 @@ function Header({ date, setDate }) {
       }
       setDate(state => ({ ...state, month: month - 1 }));
     },
-    [year, month]
+    [month, setDate, year]
   );
 
   const onNext = useCallback(
@@ -27,7 +27,7 @@ function Header({ date, setDate }) {
       }
       setDate(state => ({ ...state, month: month + 1 }));
     },
-    [year, month]
+    [month, setDate, year]
   );
 
   const onCurrent = useCallback(() => {
@@ -36,7 +36,7 @@ function Header({ date, setDate }) {
       year: state.currentYear,
       month: state.currentMonth
     }));
-  });
+  }, [setDate]);
 
   return (
     <div className={cx("header")}>
