@@ -22,20 +22,18 @@ export default function App() {
     fetchUserInfo();
   }, [setApp, setUser]);
 
-  function switchPage(app, user) {
-    switch (user.hasAuth) {
-      case true:
-        return <Home app={app} user={user} setApp={setApp} setUser={setUser} />;
-      case false:
-        return (
-          <SignIn
-            isCloseLogInPop={app.isCloseLogInPop}
-            setApp={setApp}
-            setUser={setUser}
-          />
-        );
+  function renderPage(app, user) {
+    if (user.hasAuth) {
+      return <Home app={app} user={user} setApp={setApp} setUser={setUser} />;
     }
+    return (
+      <SignIn
+        isCloseLogInPop={app.isCloseLogInPop}
+        setApp={setApp}
+        setUser={setUser}
+      />
+    );
   }
 
-  return app.isLoading ? <div>Loading la</div> : switchPage(app, user);
+  return app.isLoading ? <div>Loading la</div> : renderPage(app, user);
 }
