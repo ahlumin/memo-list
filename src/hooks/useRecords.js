@@ -19,5 +19,42 @@ export default function useRecords(DAO, email, year, month) {
     setRecords(state => ({ ...state, isShowField: !state.isShowField }));
   }, []);
 
-  return [records, setRecords, onToggleField];
+  const onAddRecord = useCallback(
+    (day, consume, isCredit) => {
+      return () => {
+        setRecords(state => ({
+          ...state,
+          isUpdating: true,
+          isShowField: false
+        }));
+        DAO.addRecord(email, year, month, day, consume, isCredit)
+          .then(result => {
+            setRecords(state => {
+              const ids = state.ids.slice();
+              ids.push(result.id);
+              return {
+                ...state,
+                [result.id]: {
+                  year,
+                  month,
+                  day,
+                  isCredit,
+                  consume
+                },
+                ids,
+                isUpdating: false,
+                isShowField: false
+              };
+            });
+          })
+          .catch(error => {
+            console.error("error in Field", error);
+            alert("oops! record added fail");
+          });
+      };
+    },
+    [DAO, email, month, year]
+  );
+
+  return [records, onToggleField, onAddRecord, setRecords];
 }

@@ -2,24 +2,14 @@ import React from "react";
 import PropTypes from "prop-types";
 import classnames from "classnames/bind";
 import style from "./style.scss";
-import { useInput, useAddRecord } from "hooks";
-import { DAO } from "services";
+import { useInput } from "hooks";
 const cx = classnames.bind(style);
 
-function Field({ email, year, month, date, isShowField, setRecords }) {
+function Field({ date, isShowField, onAddRecord }) {
   const [day, onDayChange] = useInput(date.today.getDate());
   const [consume, onConsumeChange] = useInput(0);
   const [isCredit, onCreditChange] = useInput(false);
-  const onSubmit = useAddRecord(
-    email,
-    year,
-    month,
-    parseInt(day),
-    parseInt(consume),
-    isCredit,
-    setRecords,
-    DAO
-  );
+  const onSubmit = onAddRecord(parseInt(day), parseInt(consume), isCredit);
 
   return (
     <div className={cx("field", { show: isShowField })}>
@@ -33,15 +23,12 @@ function Field({ email, year, month, date, isShowField, setRecords }) {
 }
 
 Field.propTypes = {
-  email: PropTypes.string.isRequired,
-  year: PropTypes.number.isRequired,
-  month: PropTypes.number.isRequired,
   date: PropTypes.shape({
     year: PropTypes.number.isRequired,
     month: PropTypes.number.isRequired
   }),
   isShowField: PropTypes.bool.isRequired,
-  setRecords: PropTypes.func.isRequired
+  onAddRecord: PropTypes.func.isRequired
 };
 
 export default Field;

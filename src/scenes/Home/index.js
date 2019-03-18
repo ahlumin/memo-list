@@ -11,7 +11,7 @@ function Home({ user }) {
   const [date, onPrevious, onNext, onCurrent] = useDate();
   const { year, month } = date;
   const { email } = user;
-  const [records, setRecords, onToggleField] = useRecords(
+  const [records, onToggleField, onAddRecord] = useRecords(
     DAO,
     email,
     year,
@@ -33,7 +33,7 @@ function Home({ user }) {
           month={month}
           date={date}
           isShowField={records.isShowField}
-          setRecords={setRecords}
+          onAddRecord={onAddRecord}
         />
 
         <>
